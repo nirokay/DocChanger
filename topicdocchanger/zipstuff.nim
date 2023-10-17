@@ -1,7 +1,8 @@
-import std/[os, streams, strutils]
+import std/[os, strutils]
 import constants, errors
 import zip/[zipfiles]
 
+const outputDocument {.strdefine.}: string = "document.out.docx"
 
 proc createTempDir*() {.raises: TempDirCreationError.} =
     ## Creates a temporary directory
@@ -47,7 +48,7 @@ proc unzipToTempDir*(filepath: string) {.raises: [ZipAccessError, ZipUnzipError,
 
 proc assembleDocumentFile*() {.raises: [ZipAccessError, IOError, OSError].} =
     var zip: ZipArchive
-    if not zip.open("document.out.docx", fmWrite):
+    if not zip.open(outputDocument, fmWrite):
         raise ZipAccessError.newException("Could not write to new zip file.")
 
     var currentFile: string
