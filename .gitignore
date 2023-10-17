@@ -1,5 +1,9 @@
 # Project:
 .vscode
 
+# Binaries:
+*.out
+*.exe
+
 # Sensitive:
 *.docx
