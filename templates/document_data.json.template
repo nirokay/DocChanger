@@ -1,5 +1,6 @@
 {
-    "document_output_directory": ".out",
+    "document_output_directory": "./path/to/output/directory/",
+    "document_source_filename": "example-document.docx",
 
     "document_date_range": {
         "starting": "yyyy-MM-dd",
@@ -7,26 +8,26 @@
     },
 
     "participants": {
-        "female": [
-            "place", "names"
+        "FEMALE": [
+            "insert", "names"
         ],
-        "male": [
-            "here"
-        ],
-        "diverse": [
+        "MALE": [
             "in"
         ],
-        "interns": [
-            "quotes"
+        "DIVERSE": [
+            "these"
         ],
+        "INTERN": [
+            "quotes"
+        ]
+    },
 
-        "name_separator": "; ",
+    "name_separator": ", ",
 
-        "search_strings": {
-            "starting": "${",
-            "participants_prefix": "PARTICIPANTS_",
-            "date": "INSERT_DATE",
-            "ending": "}"
-        }
+    "search_strings": {
+        "starting": "${",
+        "participants_prefix": "PARTICIPANTS_",
+        "date": "INSERT_DATE",
+        "ending": "}"
     }
 }

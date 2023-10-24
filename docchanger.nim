@@ -54,12 +54,8 @@ when isMainModule:
     # Parse cmd args:
     var runInteractivePrompt: bool = paramCount() == 0
 
-    # Parse json data from json file
-    if jsonFile.fileExists():
-        parseJsonToReplacement()
-
     # Parse commandline args:
-    elif not runInteractivePrompt:
+    if not runInteractivePrompt:
         var p: OptParser = initOptParser()
         for kind, key, value in p.getopt():
             case kind:
@@ -75,8 +71,10 @@ when isMainModule:
         quit QuitSuccess
 
     # Run interactive prompt, when no cmd args given (for example, executing by double-clicking):
+    #[
     else:
         interactivePrompt()
+    ]#
 
     if sourceDocxFile == "":
         sourceDocxFile = get replacement.document_source_filename

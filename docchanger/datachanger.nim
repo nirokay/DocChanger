@@ -1,5 +1,5 @@
 import std/[options, tables, strutils, strformat, times, os]
-import constants, types, zipstuff
+import constants, types, zipstuff, jsonimport
 
 
 # Get starting day to requested day:
@@ -15,6 +15,9 @@ iterator getDateForDocument*(): DateTime =
     while dateFrom <= dateTill:
         yield dateFrom
         dateFrom += days(7)
+
+# Read json file:
+parseJsonToReplacement()
 
 # Read document.xml file:
 var xmlTemplate: string
@@ -52,6 +55,8 @@ for i, v in get replacement.participants:
         with: v.namesFormatted()
     ))
 
+echo replacement
+
 var dateReplace: tuple[this, with: string] = (
     this: searchStrings.starting.get() & searchStrings.date.get() & searchStrings.ending.get(),
     with: "" # Will get reassigned for each date
@@ -60,6 +65,7 @@ var dateReplace: tuple[this, with: string] = (
 var empty: string = ""
 proc print(message: string) =
     stdout.write(empty)
+    stdout.flushFile()
     stdout.write("\r" & message)
     stdout.flushFile()
 
@@ -77,10 +83,10 @@ proc writeDocumentForEveryDate*() =
 
         # Change date on document:
         let
-            date: string = date.format("dd") & "." & date.format("MM") & "." & date.format("yyyy")
+            dateFileContent: string = date.format("dd") & "." & date.format("MM") & "." & date.format("yyyy")
             dateFileName: string = date.format("yyyy-MM-dd")
         print("Generating document " & dateFileName)
-        xml = xml.replace(dateReplace.this, date)
+        xml = xml.replace(dateReplace.this, dateFileContent)
 
         # Change participants:
         for i in replaceStrings:
@@ -92,10 +98,10 @@ proc writeDocumentForEveryDate*() =
             tempUnzippedDocumentXml.writeFile(xml)
         except IOError:
             echo "Failed to open and write to '" & tempUnzippedDocumentXml & "'! Skipping..."
-        print("Assembling document for date " & dateFileName)
+        print("  Assembling document for date " & dateFileName)
 
         assembleDocumentFile(&"{outputDirectory}/{outputFileName}_{dateFileName}.docx")
-        print "Finished document for date " & dateFileName & "\n"
+        print "    Finished document for date " & dateFileName & "\n"
 
     print("Completed task\n")
 

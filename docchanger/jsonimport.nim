@@ -43,3 +43,10 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
             "Failed to find table key, please refer to the example json file for correct format!" &
             "Details: " & e.msg
         )
+
+    echo json.fields["participants"]
+
+    # Participants:
+    replacement.participants = some json.fields["participants"].to(Table[string, seq[string]])
+
+
