@@ -7,3 +7,5 @@
 
 # Sensitive:
 *.docx
+.backup
+document_data.json

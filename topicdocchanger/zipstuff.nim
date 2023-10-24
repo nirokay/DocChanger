@@ -2,8 +2,6 @@ import std/[os, strutils]
 import constants, errors
 import zip/[zipfiles]
 
-const outputDocument {.strdefine.}: string = "document.out.docx"
-
 proc createTempDir*() {.raises: TempDirCreationError.} =
     ## Creates a temporary directory
     if tempWorkingDir.dirExists(): return
@@ -36,7 +34,7 @@ proc unzipToTempDir*(filepath: string) {.raises: [ZipAccessError, ZipUnzipError,
     var zip: ZipArchive
     try:
         if not zip.open(sourceDocxFile, fmRead):
-            raise ZipAccessError.newException("Failed to access .docx file as zip archive.")
+            raise ZipAccessError.newException("Failed to access .docx file '" & sourceDocxFile & "' as zip archive.")
     except OSError:
         raise ZipAccessError.newException("Failed to access file '" & sourceDocxFile & "'! Does file exist?")
 
@@ -46,7 +44,7 @@ proc unzipToTempDir*(filepath: string) {.raises: [ZipAccessError, ZipUnzipError,
         raise ZipUnzipError.newException("Failed to extract zip contents to '" & tempWorkingUnzipped & "'! Do you have permissions?")
 
 
-proc assembleDocumentFile*() {.raises: [ZipAccessError, IOError, OSError].} =
+proc assembleDocumentFile*(outputDocument: string = "document.out.docx") {.raises: [ZipAccessError, IOError, OSError].} =
     var zip: ZipArchive
     if not zip.open(outputDocument, fmWrite):
         raise ZipAccessError.newException("Could not write to new zip file.")

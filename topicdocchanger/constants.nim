@@ -1,18 +1,35 @@
-import std/[os]
+import std/[os, times]
+
+const dateFormat*: string = "yyyy-MM-dd"
+
 
 # OS-specific:
 let
     tempDir: string = getTempDir()
     tempWorkingDir*: string = tempDir & "temp-topicdocchanger-files/"
     tempWorkingUnzipped*: string = tempWorkingDir & "unzipped/"
+    tempUnzippedDocumentXml*: string = tempWorkingUnzipped & "word/document.xml"
 
 var
     sourceDocxFile*: string
-    sourceDocumentIsSet*: bool = false
+    outputDirectory*: string
+    outputFileName*: string
+
+    dateFromRaw*: string ## Has to be converted
+    dateTillRaw*: string ## Has to be converted
+
+    dateFrom*: DateTime ## Has to be set by `convertDates`
+    dateTill*: DateTime ## Has to be set by `convertDates`
 
 proc setSourceDocument*(filepath: string) {.raises: [OSError].} =
     ## Sets the source document
     if not filepath.fileExists():
         raise OSError.newException("Source document file '" & filepath & "' does not exist. Are you sure you gave the correct path?")
     sourceDocxFile = filepath
-    sourceDocumentIsSet = true
+
+proc convertDates*() =
+    dateFrom = parse(dateFromRaw, dateFormat)
+    dateTill = parse(dateTillRaw, dateFormat)
+
+
+

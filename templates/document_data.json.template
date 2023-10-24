@@ -1,0 +1,32 @@
+{
+    "document_output_directory": ".out",
+
+    "document_date_range": {
+        "starting": "yyyy-MM-dd",
+        "ending": "yyyy-MM-dd"
+    },
+
+    "participants": {
+        "female": [
+            "place", "names"
+        ],
+        "male": [
+            "here"
+        ],
+        "diverse": [
+            "in"
+        ],
+        "interns": [
+            "quotes"
+        ],
+
+        "name_separator": "; ",
+
+        "search_strings": {
+            "starting": "${",
+            "participants_prefix": "PARTICIPANTS_",
+            "date": "INSERT_DATE",
+            "ending": "}"
+        }
+    }
+}
