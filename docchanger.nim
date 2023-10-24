@@ -1,5 +1,5 @@
 import std/[os, parseopt, strutils, strformat, macros, options]
-import topicdocchanger/[constants, jsonimport, errors, zipstuff, types]
+import docchanger/[constants, jsonimport, errors, zipstuff, types]
 import package
 
 
@@ -82,7 +82,7 @@ when isMainModule:
         sourceDocxFile = get replacement.document_source_filename
     unzipToTempDir(sourceDocxFile)
 
-    import topicdocchanger/datachanger
+    import docchanger/datachanger
     try:
         writeDocumentForEveryDate()
     except CatchableError as e:

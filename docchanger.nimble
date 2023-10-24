@@ -4,7 +4,7 @@ version       = "0.1.0"
 author        = "nirokay"
 description   = "Replaces specific xml text in .docx files."
 license       = "GPL-3.0-only"
-bin           = @["topicdocchanger"]
+bin           = @["docchanger"]
 
 
 # Dependencies
