@@ -26,14 +26,7 @@ proc readDocumentXmlFile() =
         xmlTemplate = readFile(tempUnzippedDocumentXml)
     except IOError:
         echo "Could not read document.xml file."
-        stdout.write("Continue with empty data? [y/N] ")
-        stdout.flushFile()
-        case stdin.readLine().toLower():
-        of "y":
-            echo "Continuing..."
-        else:
-            echo "Quitting..."
-            exit QuitFailure
+        consentOrDie("Continue with empty data?", "Continuing with empty document.xml content.")
         xmlTemplate = ""
 
 proc namesFormatted*(names: seq[string]): string =
