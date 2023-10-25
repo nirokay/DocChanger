@@ -3,6 +3,14 @@ import std/[strutils]
 type Confirmation* = enum
     confirmYes, confirmNo, confirmQuestionable
 
+proc exit*(code: int) =
+    ## Same as quit(code: int), but waits for keyboard input before actually quitting
+    echo "\nProgram terminated, press ENTER to close.\n"
+    discard stdin.readLine()
+    quit(code)
+
+
+
 proc getYesNoPrompt(default: Confirmation): string =
     result = "[y/n]"
     case default:
@@ -33,7 +41,7 @@ proc consentOrDie*(question, consentResponse: string, dissentResponse: string = 
         echo consentResponse
     of confirmNo, confirmQuestionable:
         echo dissentResponse
-        quit(QuitFailure)
+        exit(QuitFailure)
 
 proc dissentOrContinue*(question, consentResponse: string, dissentResponse: string = "Quitting...") =
     printQuestion(question, confirmYes)
@@ -42,5 +50,5 @@ proc dissentOrContinue*(question, consentResponse: string, dissentResponse: stri
         echo consentResponse
     of confirmNo:
         echo dissentResponse
-        quit(QuitFailure)
+        exit(QuitFailure)
 

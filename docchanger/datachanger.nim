@@ -1,5 +1,5 @@
 import std/[options, tables, strutils, strformat, times, os]
-import constants, types, zipstuff, jsonimport
+import constants, types, zipstuff, jsonimport, confirmation
 
 
 # Get starting day to requested day:
@@ -33,7 +33,7 @@ proc readDocumentXmlFile() =
             echo "Continuing..."
         else:
             echo "Quitting..."
-            quit QuitFailure
+            exit QuitFailure
         xmlTemplate = ""
 
 proc namesFormatted*(names: seq[string]): string =
@@ -54,8 +54,6 @@ for i, v in get replacement.participants:
         this: toReplace,
         with: v.namesFormatted()
     ))
-
-echo replacement
 
 var dateReplace: tuple[this, with: string] = (
     this: searchStrings.starting.get() & searchStrings.date.get() & searchStrings.ending.get(),
@@ -90,7 +88,6 @@ proc writeDocumentForEveryDate*() =
 
         # Change participants:
         for i in replaceStrings:
-            echo "Replacing " & i.this & " with " & i.with
             xml = xml.replace(i.this, i.with)
 
         # Write to file and assemble zip file:

@@ -12,7 +12,7 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
         json = jsonFile.readFile().parseJson()
 
     except IOError, OSError:
-        raise JsonFileNotFoundError.newException("Did not find json data file. Expected at '" & getCurrentDir() & jsonFile & "'.")
+        raise JsonFileNotFoundError.newException("Did not find json data file. Expected at '" & getCurrentDir() & "'.")
 
     except JsonParsingError as e:
         raise JsonParsingError.newException(
@@ -34,6 +34,7 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
     sourceDocxFile = get replacement.document_source_filename
     outputDirectory = get replacement.document_output_directory
 
+    # Parse date from json and assign to global vars:
     try:
         let dates: Table[string, string] = get replacement.document_date_range
         dateFromRaw = dates["starting"]
@@ -43,10 +44,4 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
             "Failed to find table key, please refer to the example json file for correct format!" &
             "Details: " & e.msg
         )
-
-    echo json.fields["participants"]
-
-    # Participants:
-    replacement.participants = some json.fields["participants"].to(Table[string, seq[string]])
-
 
