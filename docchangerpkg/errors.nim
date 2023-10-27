@@ -7,6 +7,7 @@ type
 
     ZipError* = object of IOError
     ZipAccessError* = object of ZipError
+    ZipWriteError* = object of ZipError
     ZipUnzipError* = object of ZipError
 
     JsonFileNotFoundError* = object of OSError

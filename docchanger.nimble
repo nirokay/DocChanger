@@ -10,4 +10,4 @@ bin           = @["docchanger"]
 # Dependencies
 
 requires "nim >= 2.0.0"
-requires "zip", "pkginfo"
+requires "zippy" # , "pkginfo"

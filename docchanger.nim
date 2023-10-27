@@ -1,6 +1,6 @@
 import std/[os, parseopt, strutils, options]
-import docchanger/[constants, errors, zipstuff, types, confirmation]
-import docchanger/datachanger
+import docchangerpkg/[constants, errors, zipstuff, types, confirmation]
+import docchangerpkg/datachanger
 import package
 
 
