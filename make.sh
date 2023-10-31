@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BUILD="build"
+NIMBLE="nimble build -d:release"
 
-nimble build && mv "docchanger" $BUILD
-nimble build -d:mingw && mv "docchanger.exe" $BUILD
+$NIMBLE          && mv "docchanger"     $BUILD
+$NIMBLE -d:mingw && mv "docchanger.exe" $BUILD
