@@ -1,4 +1,4 @@
-import std/[os, parseopt, strutils, options]
+import std/[os, parseopt, strutils, strformat, options]
 import docchangerpkg/[constants, errors, zipstuff, types, confirmation]
 import docchangerpkg/datachanger
 import package
@@ -22,7 +22,12 @@ when isMainModule:
             )
 
         newCommand("help", "h", "Prints this help message.", proc(_: string) =
-            var lines: seq[string]
+            var lines: seq[string] = @[
+                &"{projectName} - {projectVersion}",
+                projectDescription,
+                &"{projectSource} by " & projectAuthors.join(", ") & &" - distributed as {projectLicence}",
+                "\nFlags:",
+            ]
             for cmd in commands:
                 lines.add(
                     alignLeft("-" & cmd.nameShort & ", --" & cmd.nameLong, 25) & cmd.desc
@@ -33,7 +38,7 @@ when isMainModule:
         )
 
         newCommand("version", "v", "Prints the program version.", proc(_: string) =
-            echo projectVersion
+            echo &"{projectName} - {projectVersion}"
             quit QuitSuccess
         )
 
