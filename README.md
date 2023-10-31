@@ -72,7 +72,7 @@ For an example, see `./templates/document_data.json.template`
 
 Document editors are weird. Sometimes a string is randomly interrupted and split into multiple parts in the xml-file. There is probably a performance reason for it or something, but it is bad for us in our case...
 
-**If the program fails to replace a specific substring:**
+### Program fails to replace a specific substring
 
 1. Unzip the source `.docx` file.
 
@@ -83,3 +83,17 @@ Document editors are weird. Sometimes a string is randomly interrupted and split
 4. Place all broken-up substrings together, so they form the correct replacement string again.
 
 5. Optional: Delete empty xml blocks (if you cut out and pasted from one block to another)
+
+6. Re-zip the items and change the `.zip` to a `.docx`.
+
+   **Important:** Only zip the file contents directly, not the extracted directory itself. That would make most applications handle it as a corrupted/incorrect file.
+
+### Program fails to parse the config json file
+
+Make sure the json is formatted correctly, common mistakes may include:
+
+* Trailing or missing commas - commas separate array/table values
+
+* Unquoted values - all values must be inside quotes (like this: `"index": "value"`), unless it is a number (which are not used in the config file)
+
+To ensure correct format, see the [format section](#json-config-file-data-types) above or look at the example at `./templates/document_data.json.template`.
