@@ -25,7 +25,8 @@ when isMainModule:
             var lines: seq[string] = @[
                 &"{projectName} - {projectVersion}",
                 projectDescription,
-                &"{projectSource} by " & projectAuthors.join(", ") & &" - distributed as {projectLicence}",
+                "by " & projectAuthors.join(", ") & &" - distributed as {projectLicence}",
+                projectSource,
                 "\nFlags:",
             ]
             for cmd in commands:
