@@ -45,40 +45,7 @@ The `${}` can be changed in the json with the `.search_strings.starting` and
 
 ## JSON config file data types
 
-This is the json config file structure (roughly implemented in Nim, because
-type safety!):
-
-```nim
-import std/tables
-type JsonConfig = object
-    # Path to directory, where assembled documents will be put:
-    document_output_directory*: string = ".out"
-    # Source document (with substrings, that will be replaced):
-    document_source_filename*: string = "example_document.docx"
-
-    # Date range to create documents:
-    document_date_range*: Table[string, string] = toTable {
-        "starting": "yyyy-MM-dd",
-        "ending": "yyyy-MM-dd"
-    }
-
-    # Participant data:
-    participants*: Table[string, seq[string]] = toTable {
-        "FEMALE": @["person0"],
-        "MALE": @["person1", "person2"]
-    }
-
-    # Used to separate names in participants listing:
-    name_separator*: string = ", "
-
-    # To-replace substrings:
-    search_strings*: Table[string, string] = toTable {
-        "starting": "${",
-        "participants_prefix": "PARTICIPANTS_",
-        "date": "INSERT_DATE",
-        "ending": "}"
-    }
-```
+For documentation see the [json file structure document](./templates/README.md).
 
 For an example, see `./templates/document_data.json.template`
 
@@ -133,8 +100,7 @@ Make sure the json is formatted correctly, common mistakes may include:
 * Trailing or missing commas - commas separate array/table values
 
 * Unquoted values - all values must be inside quotes (like this:
-  `"index": "value"`), unless it is a number (which are not used
-  in the config file)
+  `"index": "value"`), unless it is a number (-> `"index": 5`).
 
 To ensure correct format, see the [format section](#json-config-file-data-types)
 above or look at the example at `./templates/document_data.json.template`.
