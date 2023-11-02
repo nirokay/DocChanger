@@ -43,10 +43,12 @@ proc unzipToTempDir*(filepath: string) {.raises: [ZipUnzipError, IOError, TempDi
         raise ZipUnzipError.newException("Failed to extract zip contents to '" & tempWorkingUnzipped & "'! Do you have permissions?")
 
 
-proc assembleDocumentFile*(outputDocument: string = "document.out.docx") {.raises: [IOError].} =
+proc assembleDocumentFile*(outputDocument: string = "document.out.docx") {.raises: [OSError, IOError].} =
     try:
         createZipArchive(tempWorkingUnzipped, outputDocument)
-    except OSError, IOError:
-        raise IOError.newException("Could not access temporary directory '" & tempWorkingUnzipped & "'!")
+    except OSError:
+        raise OSError.newException("Could not access temporary directory '" & tempWorkingUnzipped & "'!")
+    except IOError:
+        raise IOError.newException("Could not create file with name '" & outputDocument & "'. Does it already exist?")
     except ZippyError:
         raise ZipWriteError.newException("Could not write .docx file.")

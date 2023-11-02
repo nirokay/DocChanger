@@ -1,11 +1,11 @@
-import std/[os, json as jsonClass, options, tables]
+import std/[os, json as jsonClass, options, tables, times]
 import types, errors, constants
 
 const
     jsonFile*: string = "document_data.json"
     jsonExampleFileContent*: string = readFile("templates/" & jsonFile & ".template")
 
-proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingError, JsonFormatError, OSError, ValueError, IOError].} =
+proc parseJsonToReplacement*() {.raises: [TimeTravelError, JsonFileNotFoundError, JsonParsingError, JsonFormatError, OSError, ValueError, IOError,].} =
     var json: JsonNode
 
     try:
@@ -21,7 +21,7 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
         )
     finally:
         if not jsonFile.fileExists():
-            echo "Generating example json file."
+            echo "Generating example json file at '" & getCurrentDir() & jsonFile & "'."
             jsonFile.writeFile(jsonExampleFileContent)
 
 
@@ -35,13 +35,20 @@ proc parseJsonToReplacement*() {.raises: [JsonFileNotFoundError, JsonParsingErro
     outputDirectory = get replacement.document_output_directory
 
     # Parse date from json and assign to global vars:
+    let dates: DateRange = get replacement.document_date_range
     try:
-        let dates: Table[string, string] = get replacement.document_date_range
-        dateFromRaw = dates["starting"]
-        dateTillRaw = dates["ending"]
+        dateFromRaw = dates.starting
+        dateTillRaw = dates.ending
     except KeyError as e:
         raise JsonParsingError.newException(
-            "Failed to find table key, please refer to the example json file for correct format!" &
+            "Failed to find table key, please refer to the example json file for correct format!\n" &
             "Details: " & e.msg
         )
 
+    # Convert and validate date ranges:
+    convertDates()
+    if dateFrom > dateTill:
+        raise TimeTravelError.newException(
+            "Failed to travel in time - ending date lies in the past compared to the starting date. " &
+            "Were the values mixed up?"
+        )

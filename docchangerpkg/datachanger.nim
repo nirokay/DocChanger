@@ -1,20 +1,56 @@
 import std/[options, tables, strutils, strformat, times, os]
 import constants, types, zipstuff, jsonimport, confirmation
 
+var generationStatus: tuple[successes, failures: int, failsAt: seq[string]]
+proc addSuccess() =
+    generationStatus.successes.inc()
+proc addFailure(date: string) =
+    generationStatus.failures.inc()
+    generationStatus.failsAt.add(date)
 
-# Get starting day to requested day:
 proc setDatesFinal() =
-    if dateFrom != dateTill: return
-    let requestedDay: WeekDay = dThu
-    convertDates()
+    ## Get starting date to requested weekday
+    if dateFrom == dateTill: return
+    var requestedDay: WeekDay
+    # Amazing code:
+    let weekdayNumber: int = get(replacement.document_date_range).starting_weekday
+    case weekdayNumber:
+    # Weekdays:
+    of 1: requestedDay = dMon
+    of 2: requestedDay = dTue
+    of 3: requestedDay = dWed
+    of 4: requestedDay = dThu
+    of 5: requestedDay = dFri
+    of 6: requestedDay = dSat
+    of 7: requestedDay = dSun
+    # Ignore weekday:
+    of 0:
+        echo &"Setting starting weekday to the starting date ({dateFrom.weekday})!"
+        return
+    # Complain and shame the user, ask for consent, then ignore the weekday:
+    else:
+        consentOrDie(
+            &"Got invalid weekday number ({weekdayNumber}), expected range from 0 to 7 (Ignore: 0 ; Monday: 1 ; ... Sunday: 7)!\n" &
+            &"Was this a mistake? Continue as if it was set to ignore? Starting weekday will be set to {dateFrom.weekday}.",
+
+            &"Continuing with {dateFrom.weekday} as beginning weekday.",
+
+            "Aborting..."
+        )
+        return
+
     while dateFrom.weekday != requestedDay:
         dateFrom += days(1)
+    echo &"Setting starting weekday to {dateFrom.weekday}!"
+
 
 iterator getDateForDocument*(): DateTime =
     setDatesFinal()
+    echo "Beginning generation..."
+    let interval: int = get(replacement.document_date_range).day_interval
     while dateFrom <= dateTill:
         yield dateFrom
-        dateFrom += days(7)
+        dateFrom += days(interval)
 
 # Read json file:
 parseJsonToReplacement()
@@ -63,11 +99,13 @@ proc print(message: string) =
     empty = repeat(' ', message.len())
 
 proc writeDocumentForEveryDate*() =
-    setDatesFinal()
     readDocumentXmlFile()
     if not outputDirectory.dirExists():
         outputDirectory.createDir()
-    outputFileName = sourceDocxFile.strip().split(".")[0..^2].join(".")
+    try:
+        outputFileName = sourceDocxFile.strip().split(".")[0..^2].join(".")
+    except Defect:
+        raise ValueError.newException("Failed to split source document file name. Please make sure it is named in this pattern: '[document name].[file extention]'")
 
     for date in getDateForDocument():
         var xml: string = xmlTemplate
@@ -76,7 +114,7 @@ proc writeDocumentForEveryDate*() =
         let
             dateFileContent: string = date.format("dd") & "." & date.format("MM") & "." & date.format("yyyy")
             dateFileName: string = date.format("yyyy-MM-dd")
-        print("Generating document " & dateFileName)
+        print("🗘 Generating document " & dateFileName)
         xml = xml.replace(dateReplace.this, dateFileContent)
 
         # Change participants:
@@ -87,11 +125,27 @@ proc writeDocumentForEveryDate*() =
         try:
             tempUnzippedDocumentXml.writeFile(xml)
         except IOError:
-            echo "Failed to open and write to '" & tempUnzippedDocumentXml & "'! Skipping..."
-        print("  Assembling document for date " & dateFileName)
+            addFailure(dateFileName)
+            print("🗙     Failed to open and write to '" & tempUnzippedDocumentXml & "'! Skipping...\n")
+            continue
+        print("⇅   Assembling document for date " & dateFileName)
 
-        assembleDocumentFile(&"{outputDirectory}/{outputFileName}_{dateFileName}.docx")
-        print "    Finished document for date " & dateFileName & "\n"
+        try:
+            assembleDocumentFile(&"{outputDirectory}/{outputFileName}_{dateFileName}.docx")
+        except CatchableError as e:
+            addFailure(dateFileName)
+            print(&"🗙     Failed to assemble document for date {dateFileName}\n\tDetails: {e.msg}\n")
+            continue
+        print "✓     Finished document for date " & dateFileName & "\n"
+        addSuccess()
 
-    print("Completed task\n")
+    print("✓ Completed task\n")
+
+    # Print stats:
+    echo @[
+        "Successes: " & $generationStatus.successes,
+        "Failures:  " & $generationStatus.failures
+    ].join("\n")
+    if generationStatus.failsAt.len() != 0:
+        echo "Failed at: " & generationStatus.failsAt.join(", ")
 

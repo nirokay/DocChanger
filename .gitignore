@@ -1,13 +1,13 @@
 # Project:
-.vscode
+.vscode/
 
 # Binaries:
 *.out
 *.exe
 docchanger
-build
+build/
 
 # Sensitive:
+.backup/
 *.docx
-.backup
-document_data.json
+*.json

@@ -4,7 +4,9 @@
 
     "document_date_range": {
         "starting": "yyyy-MM-dd",
-        "ending": "yyyy-MM-dd"
+        "ending": "yyyy-MM-dd",
+        "starting_weekday": 0,
+        "day_interval": 7
     },
 
     "participants": {
