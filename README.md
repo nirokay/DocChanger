@@ -21,6 +21,17 @@ current directory (most of the times: right next to the executable).
 If this file is not found, the program generates a template json file
 (template can be found at `./templates/document_data.json.template`).
 
+## Installation
+
+* Pre-build binaries are available for Linux (elf64) Micro$hit Windows (exe64)
+  in the releases tab (compiled on x86-64, they may or may not work for you)
+
+* Nimble: `nimble install docchanger` (`*[1]`)
+
+* Manual: `git clone https://github.com/nirokay/docchanger && cd docchanger && nimble install` (`*[1]`)
+
+> `*[1]` requires Nim toolchain (compiler and nimble)
+
 ## Default behaviour
 
 By default the json will make the program search for the following substrings:
@@ -58,11 +69,11 @@ is implemented in pure Nim and is fully portable.
 
 **Dependencies:**
 
-* Nim (version 2.0 or higher`*[1]`) and Nimble
+* Nim (version 2.0 or higher`*[2]`) and Nimble
 
 * bash (Optional: only used for automatic building)
 
-> `*[1]` source code should be backwards-compatible to at minimum `1.6.x`
+> `*[2]` source code should be backwards-compatible to at minimum `1.6.x`
 > Nim versions by modifying the `.nimble` file to accept older Nim versions
 
 ## Troubleshooting
