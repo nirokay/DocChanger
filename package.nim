@@ -1,11 +1,12 @@
-# import pkginfo
-
-# let pkg = pkg("docchanger")
+## Package information for help and version commands
+##
+## I tried using pkginfo, but it does not work :/
+## So I have to awkwardly, manually write the stuff here...
 
 const
-    projectName*: string = "docchanger" # pkg.getName()
-    projectDescription*: string = "Replaces specific xml text in .docx files." # pkg.getDescription()
-    projectVersion*: string = "v1.0.1" # "v" & pkg.version()
-    projectAuthors*: seq[string] = @["nirokay"] # @[pkg.getAuthor()]
-    projectLicence*: string = "GPL-3.0-only" # pkg.getLicense()
-    projectSource*: string = "https://github.com/nirokay/DocChanger/"
+    projectName*: string =         "docchanger"
+    projectDescription*: string =  "Replaces specific xml text in .docx files."
+    projectVersion*: string =      "v1.1.0"
+    projectAuthors*: seq[string] = @["nirokay"]
+    projectLicence*: string =      "GPL-3.0"
+    projectSource*: string =       "https://github.com/nirokay/DocChanger/"

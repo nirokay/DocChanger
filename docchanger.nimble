@@ -1,6 +1,6 @@
 # Package
 
-version       = "1.0.1"
+version       = "1.1.0"
 author        = "nirokay"
 description   = "Replaces specific xml text in .docx files."
 license       = "GPL-3.0-only"

@@ -1,3 +1,6 @@
+## Custom error objects
+## ====================
+
 type
     DocumentChangerError* = object of CatchableError ## Generic error when creating document for every date fails
 

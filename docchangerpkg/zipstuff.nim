@@ -1,3 +1,8 @@
+## ZipStuff
+## ========
+##
+## Handles all things zip. Unzips and assembles zip files.
+
 import std/[os]
 import constants, errors
 import zippy/[ziparchives]

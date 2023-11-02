@@ -1,3 +1,8 @@
+## Confirmations
+## =============
+##
+## This module handles user input - consenting or dissenting to something.
+
 import std/[strutils]
 
 type Confirmation* = enum

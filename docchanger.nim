@@ -1,3 +1,14 @@
+## DocChanger
+## ==========
+## DocChanger automatically edits the document.xml file of .docx files.
+## It lets you easily insert data into documents from json and especially dates!!!
+##
+## You need 50 documents for every, let us hypothetically say, a Monday for a whole year?
+## Will it be printed out and needs a date in the document? Well ohh boy... do I have good news!
+##
+## This program will automate that process and is flexible enough to insert arbitrary data, such
+## as meeting participants as well.
+
 import std/[os, parseopt, strutils, strformat, options]
 import docchangerpkg/[constants, errors, zipstuff, types, confirmation]
 import docchangerpkg/datachanger

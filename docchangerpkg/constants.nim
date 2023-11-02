@@ -1,3 +1,6 @@
+## Globals and constants
+## =====================
+
 import std/[os, times]
 
 const dateFormat*: string = "yyyy-MM-dd"

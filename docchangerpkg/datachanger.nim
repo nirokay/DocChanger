@@ -1,3 +1,8 @@
+## Data changer
+## ============
+##
+## This module handles modifying the xml document and some config stuff, such as custom weekdays.
+
 import std/[options, tables, strutils, strformat, times, os]
 import constants, types, zipstuff, jsonimport, confirmation
 

@@ -1,3 +1,8 @@
+## Types
+## =====
+##
+## Includes all global types (basically only the `Replacement` object)
+
 import std/[tables, options]
 
 type

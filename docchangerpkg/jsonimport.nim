@@ -1,3 +1,8 @@
+## JSON import module
+## ==================
+##
+## Handles parsing json and binding it to the `Replacement` object.
+
 import std/[os, json as jsonClass, options, tables, times]
 import types, errors, constants
 
