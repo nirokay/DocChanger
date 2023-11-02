@@ -113,5 +113,5 @@ Make sure the json is formatted correctly, common mistakes may include:
 * Unquoted values - all values must be inside quotes (like this:
   `"index": "value"`), unless it is a number (-> `"index": 5`).
 
-To ensure correct format, see the [format section](#json-config-file-data-types)
-above or look at the example at `./templates/document_data.json.template`.
+To ensure correct format, see the [json config file format document](#json-config-file-data-types)
+or look at the example at `./templates/document_data.json.template`.
