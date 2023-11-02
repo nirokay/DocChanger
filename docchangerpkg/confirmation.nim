@@ -9,7 +9,7 @@ type Confirmation* = enum
     confirmYes, confirmNo, confirmQuestionable
 
 proc exit*(code: int) =
-    ## Same as quit(code: int), but waits for keyboard input before actually quitting
+    ## Same as `quit(code: int)`, but waits for keyboard input before actually terminating the process
     echo "\nProgram terminated, press ENTER to close.\n"
     discard stdin.readLine()
     quit(code)
@@ -34,12 +34,14 @@ proc readInput(): Confirmation =
     else: confirmQuestionable
 
 proc printQuestion(question: string, default: Confirmation) =
+    ## Prints the question with the [y/n] prompt
     stdout.write(question & " " & default.getYesNoPrompt() & " ")
     stdout.flushFile()
 
 
 
 proc consentOrDie*(question, consentResponse: string, dissentResponse: string = "Quitting...") =
+    ## Give consent or terminate process
     printQuestion(question, confirmNo)
     case readInput()
     of confirmYes:
@@ -49,6 +51,7 @@ proc consentOrDie*(question, consentResponse: string, dissentResponse: string = 
         exit(QuitFailure)
 
 proc dissentOrContinue*(question, consentResponse: string, dissentResponse: string = "Quitting...") =
+    ## Revoke consent or continue with execution
     printQuestion(question, confirmYes)
     case readInput()
     of confirmYes, confirmQuestionable:

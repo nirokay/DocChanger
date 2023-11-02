@@ -6,6 +6,9 @@ description   = "Replaces specific xml text in .docx files."
 license       = "GPL-3.0-only"
 bin           = @["docchanger"]
 
+# Include required compile-time files
+
+installExt    = @["template"]
 
 # Dependencies
 

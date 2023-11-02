@@ -7,10 +7,11 @@ import std/[os, json as jsonClass, options, tables, times]
 import types, errors, constants
 
 const
-    jsonFile*: string = "document_data.json"
-    jsonExampleFileContent*: string = readFile("templates/" & jsonFile & ".template")
+    jsonFile* {.strdefine.}: string = "document_data.json" ## Semi-hardcoded json filename
+    jsonExampleFileContent*: string = readFile("templates/" & jsonFile & ".template") ## Compile-time json template reading (used for making a template, if no json was found, so the user does not have to painstakingly copy paste it from github)
 
 proc parseJsonToReplacement*() {.raises: [TimeTravelError, JsonFileNotFoundError, JsonParsingError, JsonFormatError, OSError, ValueError, IOError,].} =
+    ## Parses the json file and writes to the global replacement object
     var json: JsonNode
 
     try:

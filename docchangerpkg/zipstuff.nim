@@ -49,6 +49,7 @@ proc unzipToTempDir*(filepath: string) {.raises: [ZipUnzipError, IOError, TempDi
 
 
 proc assembleDocumentFile*(outputDocument: string = "document.out.docx") {.raises: [OSError, IOError].} =
+    ## Assembles the .docx file from the temporary directory
     try:
         createZipArchive(tempWorkingUnzipped, outputDocument)
     except OSError:

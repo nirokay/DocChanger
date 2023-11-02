@@ -6,15 +6,18 @@
 import std/[options, tables, strutils, strformat, times, os]
 import constants, types, zipstuff, jsonimport, confirmation
 
-var generationStatus: tuple[successes, failures: int, failsAt: seq[string]]
+var generationStatus: tuple[successes, failures: int, failsAt: seq[string]] ## Keeps track of successes and failures
+
 proc addSuccess() =
+    ## Increments the success counter
     generationStatus.successes.inc()
 proc addFailure(date: string) =
+    ## increments the failure counter and adds the date to the list of failures
     generationStatus.failures.inc()
     generationStatus.failsAt.add(date)
 
 proc setDatesFinal() =
-    ## Get starting date to requested weekday
+    ## Set starting date to requested weekday
     if dateFrom == dateTill: return
     var requestedDay: WeekDay
     # Amazing code:
@@ -50,6 +53,7 @@ proc setDatesFinal() =
 
 
 iterator getDateForDocument*(): DateTime =
+    ## Calls `setDatesFinal()` and then yields at every date until `dateTill` is reached
     setDatesFinal()
     echo "Beginning generation..."
     let interval: int = get(replacement.document_date_range).day_interval
@@ -63,6 +67,7 @@ parseJsonToReplacement()
 # Read document.xml file:
 var xmlTemplate: string
 proc readDocumentXmlFile() =
+    ## Reads the xml of the template and stores it to the `xmlTemplate` variable
     try:
         xmlTemplate = readFile(tempUnzippedDocumentXml)
     except IOError:
@@ -71,11 +76,12 @@ proc readDocumentXmlFile() =
         xmlTemplate = ""
 
 proc namesFormatted*(names: seq[string]): string =
+    ## Shortcut to get the names formatted (separated by `replacement.name_separator.get()`) or get a "/", if `names.len() == 0`
     result = names.join(get replacement.name_separator)
     if result == "":
         result = "/"
 
-var replaceStrings: seq[tuple[this, with: string]]
+var replaceStrings: seq[tuple[this, with: string]] ## List of everything to replace
 let searchStrings: SearchStrings = get replacement.search_strings
 for i, v in get replacement.participants:
     let toReplace: string = block:
@@ -92,10 +98,11 @@ for i, v in get replacement.participants:
 var dateReplace: tuple[this, with: string] = (
     this: searchStrings.starting.get() & searchStrings.date.get() & searchStrings.ending.get(),
     with: "" # Will get reassigned for each date
-)
+) ## Init the date replacement, the date will get set in the iterator
 
 var empty: string = ""
 proc print(message: string) =
+    ## Shortcut to print stuff nicely
     stdout.write(empty)
     stdout.flushFile()
     stdout.write("\r" & message)
@@ -104,6 +111,7 @@ proc print(message: string) =
     empty = repeat(' ', message.len())
 
 proc writeDocumentForEveryDate*() =
+    ## High-level proc, that generates every .docx file
     readDocumentXmlFile()
     if not outputDirectory.dirExists():
         outputDirectory.createDir()
